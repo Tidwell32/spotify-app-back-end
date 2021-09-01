@@ -20,6 +20,7 @@ class artist {
 class genre {
   readonly ranking: number;
   readonly name: string;
+  readonly count: number;
 }
 
 export class CreateUserDTO {

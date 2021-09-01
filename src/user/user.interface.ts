@@ -22,6 +22,7 @@ interface Artist {
 interface Genre {
   readonly ranking: number;
   readonly name: string;
+  readonly count: number;
 }
 
 export interface User extends Document {

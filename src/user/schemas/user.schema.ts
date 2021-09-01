@@ -22,6 +22,7 @@ const Artist = new mongoose.Schema({
 const Genre = new mongoose.Schema({
   ranking: Number,
   name: String,
+  count: Number,
 });
 
 export const UserSchema = new mongoose.Schema({
