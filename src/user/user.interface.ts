@@ -31,6 +31,7 @@ export interface User extends Document {
   readonly email: string;
   readonly picture: string;
   readonly popularity: number;
+  readonly dob: number;
   readonly topFifty: string[];
   readonly genres: Genre[];
   readonly artists: Artist[];

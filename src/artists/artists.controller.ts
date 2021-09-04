@@ -11,4 +11,12 @@ export class ArtistsController {
     const response = res.status(HttpStatus.OK).json(topArtists);
     return response;
   }
+
+  @Get('search/:params')
+  async searchArtists(@Res() res, @Param('params') params) {
+    const split = params.split('&');
+    const results = await this.artistsService.searchArtists(split[0], split[1]);
+    const response = res.status(HttpStatus.OK).json(results);
+    return response;
+  }
 }

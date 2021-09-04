@@ -12,4 +12,12 @@ export class TracksController {
     const response = res.status(HttpStatus.OK).json(topTracks);
     return response;
   }
+
+  @Get('search/:params')
+  async searchArtists(@Res() res, @Param('params') params) {
+    const split = params.split('&');
+    const results = await this.tracksService.searchTracks(split[0], split[1]);
+    const response = res.status(HttpStatus.OK).json(results);
+    return response;
+  }
 }

@@ -29,6 +29,7 @@ export class CreateUserDTO {
   readonly email: string;
   readonly picture: string;
   readonly popularity: number;
+  readonly dob: number;
   readonly topFifty: string[];
   readonly genres: genre[];
   readonly artists: artist[];

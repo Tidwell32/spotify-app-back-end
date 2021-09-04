@@ -21,4 +21,16 @@ export class ArtistsService {
       },
     );
   }
+
+  async searchArtists(accessToken, artist): Promise<Artists> {
+    await spotifyApi.setAccessToken(accessToken);
+    return spotifyApi.searchArtists(artist).then(
+      function (data) {
+        return data.body.artists.items;
+      },
+      function (err) {
+        return { message: err.body.error.message };
+      },
+    );
+  }
 }

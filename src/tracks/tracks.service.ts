@@ -21,4 +21,15 @@ export class TracksService {
       },
     );
   }
+  async searchTracks(accessToken, track): Promise<Tracks> {
+    await spotifyApi.setAccessToken(accessToken);
+    return spotifyApi.searchTracks(track).then(
+      function (data) {
+        return data.body.tracks.items;
+      },
+      function (err) {
+        return { message: err.body.error.message };
+      },
+    );
+  }
 }

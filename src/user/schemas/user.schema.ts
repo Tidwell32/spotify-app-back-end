@@ -32,6 +32,7 @@ export const UserSchema = new mongoose.Schema({
   picture: String,
   popularity: Number,
   lastUpdated: Number,
+  dob: Number,
   topFifty: [String],
   genres: [Genre],
   artists: [Artist],

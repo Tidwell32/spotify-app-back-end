@@ -68,4 +68,15 @@ export class UserController {
     }
     return res.status(HttpStatus.OK).json(user);
   }
+
+  @Post('delete/:id')
+  async deleteUser(@Res() res, @Param('id') id) {
+    const user = await this.userService.deleteUser(id);
+    if (!user) {
+      throw new NotFoundException('none');
+    }
+    return res.status(HttpStatus.OK).json({
+      message: 'User has been deleted',
+    });
+  }
 }
