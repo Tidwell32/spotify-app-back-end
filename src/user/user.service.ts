@@ -3,19 +3,34 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './user.interface';
 import { CreateUserDTO } from './dto/user.dto';
+import { Recommendation } from 'src/recommendation/recommendation.interface';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
+  constructor(
+    @InjectModel('User') private userModel: Model<User>,
+    @InjectModel('Recommendation')
+    private readonly recommendationModel: Model<Recommendation>,
+  ) {}
 
   async addUser(createUserDTO: CreateUserDTO): Promise<User> {
     const newUser = await new this.userModel(createUserDTO);
     return newUser.save();
   }
 
-  async getUser(spotifyId): Promise<User> {
-    const User = await this.userModel.findOne({ spotifyId: spotifyId }).exec();
-    return User;
+  async getUser(spotifyId): Promise<any> {
+    const User = await this.userModel.findOne({ spotifyId: spotifyId }).lean();
+    if (User) {
+      const recommendations = await this.recommendationModel
+        .find({
+          userId: User._id,
+        })
+        .populate('recommendedBy', ['name', 'spotifyId', 'picture'])
+        .lean();
+      return { ...User, recommendations: recommendations };
+    } else {
+      return null;
+    }
   }
 
   async getUsers(): Promise<User[]> {

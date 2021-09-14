@@ -1,4 +1,4 @@
-import { Document } from 'mongoose';
+import { Document, ObjectId } from 'mongoose';
 
 interface Track {
   readonly ranking: number;
@@ -26,6 +26,7 @@ interface Genre {
 }
 
 export interface User extends Document {
+  readonly _id: ObjectId;
   readonly spotifyId: string;
   readonly name: string;
   readonly email: string;
@@ -40,4 +41,5 @@ export interface User extends Document {
   readonly dismissed: string[];
   readonly sentLike: string[];
   readonly receivedLike: string[];
+  readonly createdAt: string;
 }
