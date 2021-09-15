@@ -58,4 +58,39 @@ export class UserService {
     const deletedUser = await this.userModel.findByIdAndRemove(userID);
     return deletedUser;
   }
+
+  async likeUser(userID, likeID): Promise<User> {
+    const editedUser = await this.userModel.findByIdAndUpdate(
+      userID,
+      {
+        $addToSet: { sentLike: likeID },
+        $pull: { dismissed: likeID },
+      },
+      { new: true },
+    );
+    return editedUser;
+  }
+
+  async unlikeUser(userID, likeID): Promise<User> {
+    const editedUser = await this.userModel.findByIdAndUpdate(
+      userID,
+      {
+        $pull: { sentLike: likeID },
+      },
+      { new: true },
+    );
+    return editedUser;
+  }
+
+  async hideUser(userID, hideID): Promise<User> {
+    const editedUser = await this.userModel.findByIdAndUpdate(
+      userID,
+      {
+        $addToSet: { dismissed: hideID },
+        $pull: { sentLike: hideID },
+      },
+      { new: true },
+    );
+    return editedUser;
+  }
 }

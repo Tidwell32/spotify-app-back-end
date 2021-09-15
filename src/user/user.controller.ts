@@ -79,4 +79,49 @@ export class UserController {
       message: 'User has been deleted',
     });
   }
+
+  @Put('like')
+  async likeUser(@Res() res, @Body() body) {
+    const editedUser = await this.userService.likeUser(
+      body.userID,
+      body.likeID,
+    );
+    if (!editedUser) {
+      throw new NotFoundException('User does not exist!');
+    }
+    return res.status(HttpStatus.OK).json({
+      message: 'User has been successfully updated',
+      user: editedUser,
+    });
+  }
+
+  @Put('unlike')
+  async unlikeUser(@Res() res, @Body() body) {
+    const editedUser = await this.userService.hideUser(
+      body.userID,
+      body.likeID,
+    );
+    if (!editedUser) {
+      throw new NotFoundException('User does not exist!');
+    }
+    return res.status(HttpStatus.OK).json({
+      message: 'User has been successfully updated',
+      user: editedUser,
+    });
+  }
+
+  @Put('hide')
+  async hideUser(@Res() res, @Body() body) {
+    const editedUser = await this.userService.hideUser(
+      body.userID,
+      body.hideID,
+    );
+    if (!editedUser) {
+      throw new NotFoundException('User does not exist!');
+    }
+    return res.status(HttpStatus.OK).json({
+      message: 'User has been successfully updated',
+      user: editedUser,
+    });
+  }
 }

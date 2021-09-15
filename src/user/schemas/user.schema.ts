@@ -63,9 +63,6 @@ class Genre {
 
 @Schema()
 export class User {
-  @Prop()
-  _id: mongoose.Schema.Types.ObjectId;
-
   @Prop({ required: true, unique: true })
   spotifyId: string;
 

@@ -26,7 +26,6 @@ interface Genre {
 }
 
 export interface User extends Document {
-  readonly _id: ObjectId;
   readonly spotifyId: string;
   readonly name: string;
   readonly email: string;
