@@ -1,36 +1,36 @@
 import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { Recommendation } from './recommendation.interface';
-import { CreateRecommendationDTO } from './dto/recommendation.dto';
+import { CreateRecommendationInput } from './recommendation.inputs';
+import {
+  RecommendationDocument,
+  Recommendation,
+} from './schemas/recommendation.schema';
 
 @Injectable()
 export class RecommendationService {
   constructor(
-    @InjectModel('Recommendation')
-    private readonly recommendationModel: Model<Recommendation>,
+    @InjectModel(Recommendation.name)
+    private readonly recommendationModel: Model<RecommendationDocument>,
   ) {}
 
-  async addRecommendation(
-    createRecommendationDTO: CreateRecommendationDTO,
+  addRecommendation(
+    createRecommendationInput: CreateRecommendationInput,
   ): Promise<Recommendation> {
-    const newRecommendation = await new this.recommendationModel(
-      createRecommendationDTO,
+    const newRecommendation = new this.recommendationModel(
+      createRecommendationInput,
     );
     return newRecommendation.save();
   }
 
-  async getRecommendations(_id): Promise<Recommendation[]> {
-    const recommendations = await this.recommendationModel
+  getRecommendations(_id): Promise<Recommendation[]> {
+    return this.recommendationModel
       .find({ userId: _id })
       .populate('recommendedBy')
       .exec();
-    return recommendations;
   }
 
-  async deleteRecommendation(recommendationID): Promise<any> {
-    const deletedRecommendation =
-      await this.recommendationModel.findByIdAndRemove(recommendationID);
-    return deletedRecommendation;
+  deleteRecommendation(recommendationID): Promise<any> {
+    return this.recommendationModel.findByIdAndRemove(recommendationID).exec();
   }
 }

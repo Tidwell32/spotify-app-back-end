@@ -1,20 +1,27 @@
 import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { User } from './user.interface';
-import { CreateUserDTO } from './dto/user.dto';
-import { Recommendation } from 'src/recommendation/recommendation.interface';
+import { User, UserDocument } from './schemas/user.schema';
+import {
+  CreateUserInput,
+  EditUserArraysInput,
+  UpdateUserInput,
+} from './user.inputs';
+import {
+  RecommendationDocument,
+  Recommendation,
+} from '../recommendation/schemas/recommendation.schema';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectModel('User') private userModel: Model<User>,
-    @InjectModel('Recommendation')
-    private readonly recommendationModel: Model<Recommendation>,
+    @InjectModel(User.name) private userModel: Model<UserDocument>,
+    @InjectModel(Recommendation.name)
+    private readonly recommendationModel: Model<RecommendationDocument>,
   ) {}
 
-  async addUser(createUserDTO: CreateUserDTO): Promise<User> {
-    const newUser = await new this.userModel(createUserDTO);
+  addUser(createUserInput: CreateUserInput): Promise<User> {
+    const newUser = new this.userModel(createUserInput);
     return newUser.save();
   }
 
@@ -25,72 +32,79 @@ export class UserService {
         .find({
           userId: User._id,
         })
-        .populate('recommendedBy', ['name', 'spotifyId', 'picture'])
+        .populate('recommendedBy')
         .lean();
-      return { ...User, recommendations: recommendations };
+      const returnData = {
+        ...User,
+        recommendations: recommendations.filter(
+          (r) => r.recommendedBy !== null,
+        ),
+      };
+      return returnData;
     } else {
-      return null;
+      return { _id: 'none' };
     }
   }
 
-  async getUsers(): Promise<User[]> {
-    const users = await this.userModel.find().exec();
-    return users;
+  getProfile(_id): Promise<User> {
+    return this.userModel.findById(_id).exec();
   }
 
-  async getSimilar(topFifty: string[]): Promise<User[]> {
-    const users = await this.userModel
+  getUsers(): Promise<User[]> {
+    return this.userModel.find().exec();
+  }
+
+  getSimilar(topFifty: string[]): Promise<User[]> {
+    return this.userModel
       .find({ topFifty: { $elemMatch: { $in: topFifty } } })
       .exec();
-    return users;
   }
 
-  async editUser(userID, createUserDTO: CreateUserDTO): Promise<User> {
-    const editedUser = await this.userModel.findByIdAndUpdate(
-      userID,
-      createUserDTO,
-      { new: true },
-    );
-    return editedUser;
+  editUser(payload: UpdateUserInput): Promise<User> {
+    return this.userModel
+      .findByIdAndUpdate(payload._id, payload, { new: true })
+      .exec();
   }
 
-  async deleteUser(userID): Promise<any> {
-    const deletedUser = await this.userModel.findByIdAndRemove(userID);
-    return deletedUser;
+  deleteUser(userID): Promise<any> {
+    return this.userModel.findByIdAndDelete(userID).exec();
   }
 
-  async likeUser(userID, likeID): Promise<User> {
-    const editedUser = await this.userModel.findByIdAndUpdate(
-      userID,
-      {
-        $addToSet: { sentLike: likeID },
-        $pull: { dismissed: likeID },
-      },
-      { new: true },
-    );
-    return editedUser;
+  likeUser(payload: EditUserArraysInput): Promise<User> {
+    return this.userModel
+      .findByIdAndUpdate(
+        payload._id,
+        {
+          $addToSet: { sentLike: payload.otherUser },
+          $pull: { dismissed: payload.otherUser },
+        },
+        { new: true },
+      )
+      .exec();
   }
 
-  async unlikeUser(userID, likeID): Promise<User> {
-    const editedUser = await this.userModel.findByIdAndUpdate(
-      userID,
-      {
-        $pull: { sentLike: likeID },
-      },
-      { new: true },
-    );
-    return editedUser;
+  unlikeUser(payload: EditUserArraysInput): Promise<User> {
+    return this.userModel
+      .findByIdAndUpdate(
+        payload._id,
+        {
+          $pull: { sentLike: payload.otherUser },
+        },
+        { new: true },
+      )
+      .exec();
   }
 
-  async hideUser(userID, hideID): Promise<User> {
-    const editedUser = await this.userModel.findByIdAndUpdate(
-      userID,
-      {
-        $addToSet: { dismissed: hideID },
-        $pull: { sentLike: hideID },
-      },
-      { new: true },
-    );
-    return editedUser;
+  hideUser(payload: EditUserArraysInput): Promise<User> {
+    return this.userModel
+      .findByIdAndUpdate(
+        payload._id,
+        {
+          $addToSet: { dismissed: payload.otherUser },
+          $pull: { sentLike: payload.otherUser },
+        },
+        { new: true },
+      )
+      .exec();
   }
 }

@@ -6,6 +6,8 @@ import { UserModule } from './user/user.module';
 import { ArtistsModule } from './artists/artists.module';
 import { TracksModule } from './tracks/tracks.module';
 import { RecommendationModule } from './recommendation/recommendation.module';
+import { GraphQLModule } from '@nestjs/graphql';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -15,6 +17,12 @@ import { RecommendationModule } from './recommendation/recommendation.module';
         useNewUrlParser: true,
       },
     ),
+    GraphQLModule.forRoot({
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      playground: true,
+      debug: false,
+      sortSchema: true,
+    }),
     UserModule,
     ArtistsModule,
     TracksModule,

@@ -1,0 +1,185 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Artist {
+  id: String!
+  image: String!
+  name: String!
+  popularity: Float!
+  ranking: Float!
+  url: String!
+}
+
+input ArtistInput {
+  id: String!
+  image: String!
+  name: String!
+  popularity: Float!
+  ranking: Float!
+  url: String!
+}
+
+input CreateRecommendationInput {
+  artist: String!
+  id: String!
+  image: String!
+  name: String!
+  popularity: Float!
+  recommendedBy: String!
+  url: String!
+  userId: String!
+}
+
+input CreateUserInput {
+  artists: [ArtistInput!]!
+  dismissed: [String!]!
+  dob: Float!
+  email: String!
+  gender: String!
+  genres: [GenreInput!]!
+  lastUpdated: Float!
+  matched: [String!]!
+  name: String!
+  picture: String!
+  popularity: Float!
+  receivedLike: [String!]!
+  sentLike: [String!]!
+  spotifyId: String!
+  topFifty: [String!]!
+  tracks: [TrackInput!]!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+input EditUserArraysInput {
+  _id: String!
+  otherUser: String!
+}
+
+type Genre {
+  count: Float!
+  name: String!
+  ranking: Float!
+}
+
+input GenreInput {
+  count: Float!
+  name: String!
+  ranking: Float!
+}
+
+type Mutation {
+  createRecommendation(payload: CreateRecommendationInput!): Recommendation!
+  createUser(payload: CreateUserInput!): User!
+  deleteRecommendation(_id: String!): Recommendation!
+  deleteUser(_id: String!): User!
+  editUser(payload: UpdateUserInput!): User!
+  hideUser(payload: EditUserArraysInput!): User!
+  likeUser(payload: EditUserArraysInput!): User!
+  unlikeUser(payload: EditUserArraysInput!): User!
+}
+
+type Query {
+  profile(_id: String!): User!
+  recommendations(_id: String!): [Recommendation!]!
+  similar(topFifty: [String!]!): [User!]!
+  user(spotifyId: String!): UserWithRecs!
+}
+
+type Recommendation {
+  _id: String!
+  artist: String!
+  createdAt: DateTime!
+  id: String!
+  image: String!
+  name: String!
+  popularity: Float!
+  recommendedBy: User!
+  url: String!
+  userId: String!
+}
+
+type Track {
+  artist: String!
+  id: String!
+  image: String!
+  name: String!
+  popularity: Float!
+  ranking: Float!
+  url: String!
+}
+
+input TrackInput {
+  artist: String!
+  id: String!
+  image: String!
+  name: String!
+  popularity: Float!
+  ranking: Float!
+  url: String!
+}
+
+input UpdateUserInput {
+  _id: String!
+  artists: [ArtistInput!]
+  dismissed: [String!]
+  dob: Float
+  email: String
+  genres: [GenreInput!]
+  lastUpdated: Float!
+  matched: [String!]
+  name: String
+  picture: String
+  popularity: Float
+  receivedLike: [String!]
+  sentLike: [String!]
+  topFifty: [String!]
+  tracks: [TrackInput!]
+}
+
+type User {
+  _id: String!
+  artists: [Artist!]!
+  createdAt: DateTime!
+  dismissed: [String!]!
+  dob: Float!
+  email: String!
+  gender: String!
+  genres: [Genre!]!
+  lastUpdated: Float!
+  matched: [String!]!
+  name: String!
+  picture: String!
+  popularity: Float!
+  receivedLike: [String!]!
+  sentLike: [String!]!
+  spotifyId: String!
+  topFifty: [String!]!
+  tracks: [Track!]!
+}
+
+type UserWithRecs {
+  _id: String!
+  artists: [Artist!]
+  createdAt: DateTime
+  dismissed: [String!]
+  dob: Float
+  email: String
+  gender: String
+  genres: [Genre!]
+  lastUpdated: Float
+  matched: [String!]
+  name: String
+  picture: String
+  popularity: Float
+  receivedLike: [String!]
+  recommendations: [Recommendation!]
+  sentLike: [String!]
+  spotifyId: String
+  topFifty: [String!]
+  tracks: [Track!]
+}

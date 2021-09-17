@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { UserService } from './user.service';
-import { UserController } from './user.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './schemas/user.schema';
 import {
@@ -8,6 +7,7 @@ import {
   RecommendationSchema,
 } from 'src/recommendation/schemas/recommendation.schema';
 import { RecommendationModule } from 'src/recommendation/recommendation.module';
+import { UserResolver } from './user.resolver';
 
 @Module({
   imports: [
@@ -23,7 +23,6 @@ import { RecommendationModule } from 'src/recommendation/recommendation.module';
       { name: User.name, schema: UserSchema, collection: 'users' },
     ]),
   ],
-  providers: [UserService],
-  controllers: [UserController],
+  providers: [UserService, UserResolver],
 })
 export class UserModule {}
