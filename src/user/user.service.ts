@@ -35,14 +35,17 @@ export class UserService {
         .populate('recommendedBy')
         .lean();
       const returnData = {
-        ...User,
-        recommendations: recommendations.filter(
-          (r) => r.recommendedBy !== null,
-        ),
+        noUser: false,
+        user: {
+          ...User,
+          recommendations: recommendations.filter(
+            (r) => r.recommendedBy !== null,
+          ),
+        },
       };
       return returnData;
     } else {
-      return { _id: 'none' };
+      return { noUser: true, user: null };
     }
   }
 

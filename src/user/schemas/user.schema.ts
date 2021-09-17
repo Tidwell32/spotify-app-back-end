@@ -158,82 +158,96 @@ export class User {
 
 @ObjectType()
 @Schema()
-export class UserWithRecs {
+class UserWithRecs {
   @Field(() => String)
   _id: mongoose.Schema.Types.ObjectId;
 
-  @Field(() => String, { nullable: true })
+  @Field(() => String)
   @Prop()
   spotifyId: string;
 
-  @Field(() => String, { nullable: true })
+  @Field(() => String)
   @Prop()
   name: string;
 
-  @Field(() => String, { nullable: true })
+  @Field(() => String)
   @Prop()
   gender: string;
 
-  @Field(() => String, { nullable: true })
+  @Field(() => String)
   @Prop()
   email: string;
 
-  @Field(() => String, { nullable: true })
+  @Field(() => String)
   @Prop()
   picture: string;
 
-  @Field(() => Number, { nullable: true })
+  @Field(() => Number)
   @Prop()
   popularity: number;
 
-  @Field(() => Number, { nullable: true })
+  @Field(() => Number)
   @Prop()
   lastUpdated: number;
 
-  @Field(() => Number, { nullable: true })
+  @Field(() => Number)
   @Prop()
   dob: number;
 
-  @Field(() => [String], { nullable: true })
+  @Field(() => [String])
   @Prop()
   topFifty: string[];
 
-  @Field(() => [Genre], { nullable: true })
+  @Field(() => [Genre])
   @Prop()
   genres: Genre[];
 
-  @Field(() => [Artist], { nullable: true })
+  @Field(() => [Artist])
   @Prop()
   artists: Artist[];
 
-  @Field(() => [Track], { nullable: true })
+  @Field(() => [Track])
   @Prop()
   tracks: Track[];
 
-  @Field(() => [String], { nullable: true })
+  @Field(() => [String])
   @Prop()
   matched: string[];
 
-  @Field(() => [String], { nullable: true })
+  @Field(() => [String])
   @Prop()
   dismissed: string[];
 
-  @Field(() => [String], { nullable: true })
+  @Field(() => [String])
   @Prop()
   sentLike: string[];
 
-  @Field(() => [String], { nullable: true })
+  @Field(() => [String])
   @Prop()
   receivedLike: string[];
 
-  @Field(() => Date, { nullable: true })
+  @Field(() => Date)
   @Prop({ type: Date, default: Date.now })
   createdAt: Date;
 
-  @Field(() => [Recommendation], { nullable: true })
+  @Field(() => [Recommendation])
   @Prop()
   recommendations: Recommendation[];
 }
 
+@ObjectType()
+@Schema()
+export class UserReturnType {
+  @Field(() => UserWithRecs, { nullable: true })
+  @Prop()
+  user: UserWithRecs;
+
+  @Field(() => Boolean)
+  @Prop()
+  noUser: boolean;
+}
+
 export const UserWithRecsSchema = SchemaFactory.createForClass(UserWithRecs);
 export const UserSchema = SchemaFactory.createForClass(User);
+export const UserReturnTypeSchema =
+  SchemaFactory.createForClass(UserReturnType);

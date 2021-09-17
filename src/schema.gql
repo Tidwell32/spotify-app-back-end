@@ -87,7 +87,7 @@ type Query {
   profile(_id: String!): User!
   recommendations(_id: String!): [Recommendation!]!
   similar(topFifty: [String!]!): [User!]!
-  user(spotifyId: String!): UserWithRecs!
+  user(spotifyId: String!): UserReturnType!
 }
 
 type Recommendation {
@@ -162,24 +162,29 @@ type User {
   tracks: [Track!]!
 }
 
+type UserReturnType {
+  noUser: Boolean!
+  user: UserWithRecs
+}
+
 type UserWithRecs {
   _id: String!
-  artists: [Artist!]
-  createdAt: DateTime
-  dismissed: [String!]
-  dob: Float
-  email: String
-  gender: String
-  genres: [Genre!]
-  lastUpdated: Float
-  matched: [String!]
-  name: String
-  picture: String
-  popularity: Float
-  receivedLike: [String!]
-  recommendations: [Recommendation!]
-  sentLike: [String!]
-  spotifyId: String
-  topFifty: [String!]
-  tracks: [Track!]
+  artists: [Artist!]!
+  createdAt: DateTime!
+  dismissed: [String!]!
+  dob: Float!
+  email: String!
+  gender: String!
+  genres: [Genre!]!
+  lastUpdated: Float!
+  matched: [String!]!
+  name: String!
+  picture: String!
+  popularity: Float!
+  receivedLike: [String!]!
+  recommendations: [Recommendation!]!
+  sentLike: [String!]!
+  spotifyId: String!
+  topFifty: [String!]!
+  tracks: [Track!]!
 }

@@ -1,6 +1,6 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Schema as MongooseSchema } from 'mongoose';
-import { User, UserWithRecs } from './schemas/user.schema';
+import { User, UserReturnType } from './schemas/user.schema';
 import { UserService } from './user.service';
 import {
   CreateUserInput,
@@ -46,7 +46,7 @@ export class UserResolver {
   }
 
   //Queries
-  @Query(() => UserWithRecs)
+  @Query(() => UserReturnType)
   async user(@Args('spotifyId', { type: () => String }) spotifyId: string) {
     return this.userService.getUser(spotifyId);
   }
